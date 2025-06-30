@@ -1,0 +1,217 @@
+//Pausa
+function pause(){
+    core.setTimeRate(0);
+    var oldEquator = GridLinesMgr.getFlagEquatorLine();
+    var pauseLabel = LabelMgr.labelScreen(">>",
+    core.getScreenWidth() - 50,
+    core.getScreenHeight() - 50);
+    while (oldEquator == GridLinesMgr.getFlagEquatorLine()){
+        core.wait(0.05);
+    }
+    GridLinesMgr.setFlagEquatorLine(oldEquator);
+    LabelMgr.deleteLabel(pauseLabel);
+    core.setTimeRate(1);
+    return;
+}
+
+//Seleziona costellazione
+function selectConst(objName,bool){
+    if (bool==true){
+        ConstellationMgr.deselectConstellations();
+        ConstellationMgr.setFlagIsolateSelected(true);
+        for (i=0; i<objName.length; i++) {
+            obj = objName[i];
+            core.selectObjectByName(obj, true);
+            }
+    } else {
+        ConstellationMgr.deselectConstellations();
+        ConstellationMgr.setFlagIsolateSelected(false);
+        ConstellationMgr.selectAllConstellations(true);
+    }
+}
+    
+///////////////////////////////////////////
+
+
+
+
+//mi serve a me per resettare tutte le selezioni in caso se faccio test e li fermo qui altrimenti cose strane
+//StelMovementMgr.setInhibitAllAutomoves(true);
+//StelMovementMgr.setInhibitAllAutomoves(false);//disabilita automovements
+StelMovementMgr.setFlagLockEquPos(false);
+ConstellationMgr.selectAllConstellations(); //!!!!!!!!!!!!!!!
+StelMovementMgr.setFlagTracking(false);
+HighlightMgr.cleanHighlightList();
+//CustomObjectMgr.removeCustomObjects();
+//MarkerMgr.deleteAllMarkers();
+
+////////////////////////////////
+
+///sandbox per test
+
+///////////////////////////////////
+
+//nuove variabili
+var rosso="#ff9900";
+var zodiaco= new Array("Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpius","Ophiuchus","Sagittarius","Capricornus","Aquarius","Pisces");
+//set data e ora
+core.setDate("2020-03-13T17:00:00"); //tempo UT
+core.setObserverLocation("Padova,Italy",0);
+//set impostazioni visualizzazione
+core.clear("natural");
+StarMgr.setFlagStars(true);
+core.moveToAltAzi("+20","+180",0);
+StelMovementMgr.zoomTo(80,0);
+core.setGuiVisible(false);
+////titolo
+var titolo = LabelMgr.labelScreen("Titolo", 600,300, false, 40, rosso);
+LabelMgr.setLabelShow(titolo,true);
+pause();
+LabelMgr.setLabelShow(titolo,false);
+//tramonto/////////
+//var inizio = LabelMgr.labelScreen("Iniziamo!", 20,20, false, 20, rosso);
+//LabelMgr.setLabelShow(inizio, true);
+//pause();
+//LabelMgr.setLabelShow(inizio, false);
+//for (i=0; i<150; i++)
+//{ core.setDate("+ 30 seconds"); core.wait(0.05);}
+//pause();
+//al posto del tramonto
+core.setDate("2020-03-13T20:00:00");
+pause();
+
+
+//unsici i puntini
+core.clear("starchart");
+StelMovementMgr.setEquatorialMount(false);
+ConstellationMgr.setFlagBoundaries(false);
+ConstellationMgr.setFlagLabels(false);
+StarMgr.setFlagLabels(false);
+SolarSystem.setFlagLabels(false);
+NebulaMgr.setFlagHints(false);
+GridLinesMgr.setFlagEquatorGrid(false);
+StelMovementMgr.zoomTo(120,2);
+pause();
+ConstellationMgr.setFlagLabels(true);
+ConstellationMgr.setFlagArt(true);
+pause();
+ConstellationMgr.setFlagBoundaries(true);
+ConstellationMgr.setFlagLines(false);
+ConstellationMgr.setFlagArt(false);
+pause();
+//eclittica e fascia zodiacale
+GridLinesMgr.setFlagEclipticLine(true);
+pause();
+ConstellationMgr.setFlagBoundaries(false);
+ConstellationMgr.setFlagLines(true);
+ConstellationMgr.setFlagArt(true);
+selectConst(zodiaco,true);
+pause();
+
+
+//giorno
+core.clear("natural");
+GridLinesMgr.setFlagEclipticLine(true);
+ConstellationMgr.setFlagLines(true);
+ConstellationMgr.setFlagArt(true);
+ConstellationMgr.setFlagLabels(true);
+core.moveToAltAzi("+45","+180",2);
+StelMovementMgr.zoomTo(100,2);
+pause();
+
+//vado al mezzogiorno successivo
+//core.setTimeRate(5000);
+//core.waitFor("2020-03-14T11:00:00","utc");
+//pause();
+//al posto di velocizzare
+core.setDate("2020-03-14T10:49:25");
+pause();
+
+//timelapse zodiaco
+//for (i=0; i<270; i++)
+//{ core.setDate("+ 1 days");
+//core.wait(0.03);}
+//pause();
+//per velocizzare
+core.setDate("2020-12-09T10:49:27");
+pause();
+
+//zoom ofiuco
+core.clear("starchart");
+GridLinesMgr.setFlagEclipticLine(true);
+GridLinesMgr.setFlagEquatorGrid(false);
+StarMgr.setFlagLabels(false);
+ConstellationMgr.setFlagLines(true);
+ConstellationMgr.setFlagArt(true);
+ConstellationMgr.setFlagLabels(true);
+NebulaMgr.setFlagHints(false);
+ConstellationMgr.setFlagBoundaries(true);
+//core.moveToAltAzi("+10","+174",2);
+core.selectObjectByName("Sun", true);//segue il sole da ora
+StelMovementMgr.autoZoomIn(3);
+StelMovementMgr.zoomTo(90,3);
+pause();
+
+
+//arrivo all'equinozio 20/3/2021
+//for (i=0; i<101; i++){
+//	core.setDate("+ 1 days");
+//	core.wait(0.03);
+//}
+//pause();
+//per velocizzare
+core.setDate("2021-03-20T10:49:27");
+pause();
+
+
+//punti gamma
+GridLinesMgr.setFlagEquinoxJ2000Points(true);
+//CustomObjectMgr.addCustomObject("gammaJ2000","0h0m0s","0d0m0s",true);
+HighlightMgr.addPoint("0h0m0s","0d0m0s"); //coord. riferite a J2000
+HighlightMgr.setMarkersSize(35);
+HighlightMgr.setColor(Vec3f(0.0,1.0,1.0));
+
+pause();
+
+
+GridLinesMgr.setFlagEquinoxPoints(true);
+//CustomObjectMgr.addCustomObjectRaDec("gamma","0h0m0s","0d0m0s",true);
+//HighlightMgr.addPointRaDec("0h0m0s","0d0m0s"); //coord. riferite alla data corrente
+pause();
+
+//arrivo all'equinozio 24/3/179 16:01:35 a.C. circa (equinozio vero -179/03/24 02:59:13)
+for (i=0; i<220; i++){
+    core.setDate("-3652.42189670 days");
+    core.wait(0.03);}
+pause();
+//per velocizzare
+//core.setDate("-0180-03-24T15:01:35");
+//pause();
+
+
+
+//sposto al polo nord celeste
+selectConst(zodiaco,false);//ricompaiono tutte costellazioni
+ConstellationMgr.setFlagBoundaries(false);
+ConstellationMgr.setFlagArt(false);
+core.moveToRaDec("0","89",5);
+GridLinesMgr.setFlagCelestialPoles(true);//data corrente
+pause();
+GridLinesMgr.setFlagCelestialJ2000Poles(true);//J2000
+HighlightMgr.addPoint("0h0m0s","90d0m0s"); //coord. riferite a J2000
+pause();
+GridLinesMgr.setFlagPrecessionCircles(true);//circolo precessione
+pause();
+
+HighlightMgr.cleanHighlightList();//tolgo i cerchi evidenziatori
+
+//focus su drago e orse
+var gruppoOrse = new Array("Ursa Minor","Ursa Major");
+selectConst(gruppoOrse,true);
+StelMovementMgr.autoZoomIn(3);
+StelMovementMgr.zoomTo(90,3);
+ConstellationMgr.setFlagArt(true);
+pause();
+selectConst(gruppoOrse,false);
+
+
